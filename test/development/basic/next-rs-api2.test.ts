@@ -13,6 +13,7 @@ import {
 } from 'next/src/build/swc'
 import loadConfig from 'next/src/server/config'
 import path from 'path'
+import { Router } from 'packages/next/router'
 
 function normalizePath(path: string) {
   return path

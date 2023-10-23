@@ -13,6 +13,7 @@ use next_api::{
 use next_core::tracing_presets::{
     TRACING_NEXT_TARGETS, TRACING_NEXT_TURBOPACK_TARGETS, TRACING_NEXT_TURBO_TASKS_TARGETS,
 };
+use tracing::Instrument;
 use tracing_subscriber::{
     prelude::__tracing_subscriber_SubscriberExt, util::SubscriberInitExt, EnvFilter, Registry,
 };
@@ -471,6 +472,7 @@ pub fn project_hmr_events(
             move || {
                 let identifier = identifier.clone();
                 let session = session.clone();
+                let span = tracing::trace_span!("hmr_events subscription", identifier);
                 async move {
                     let state = project
                         .project()
@@ -490,6 +492,7 @@ pub fn project_hmr_events(
                     }
                     Ok((update, issues, diags))
                 }
+                .instrument(span)
             }
         },
         move |ctx| {
